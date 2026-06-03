@@ -1,2 +1,2 @@
-# mpc-rl
-MPC-guided RL for Humanoid Locomotion and Manipulation
+# Training-time MPC guidance in Reinforcement Learning for Humanoid Loco-manipulation
+Code is under preparation and will be available very soon.
