@@ -1,0 +1,300 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="themis-29dof">
+
+  <compiler angle="radian" meshdir="meshes/" eulerseq="xyz" />
+
+  <asset>
+    <mesh name="ANKLE_L" file="ANKLE_L.STL" />
+    <mesh name="ANKLE_R" file="ANKLE_R.STL" />
+    <mesh name="BASE_LINK" file="BASE_LINK.STL" />
+    <mesh name="ELBOW_L" file="ELBOW_L_rot.STL" />
+    <mesh name="ELBOW_R" file="ELBOW_R_rot.STL" />
+    <mesh name="FEMUR_L" file="FEMUR_L_rot.STL" />
+    <mesh name="FEMUR_R" file="FEMUR_R_rot.STL" />
+    <mesh name="FOOT_L" file="FOOT_L_rot2.STL" />
+    <mesh name="FOOT_R" file="FOOT_R_rot2.STL" />
+    <mesh name="FOREARM_L" file="FOREARM_L_rot.STL" />
+    <mesh name="FOREARM_R" file="FOREARM_R_rot.STL" />
+    <mesh name="HEAD" file="HEAD_rot.STL" />
+    <mesh name="HIP_ABAD_L" file="HIP_ABAD_L_rot.STL" />
+    <mesh name="HIP_ABAD_R" file="HIP_ABAD_R_rot.STL" />
+    <mesh name="HIP_L" file="HIP_L.STL" />
+    <mesh name="HIP_R" file="HIP_R.STL" />
+    <mesh name="LOWERSHOULDER_L" file="LOWERSHOULDER_L_rot.STL" />
+    <mesh name="LOWERSHOULDER_R" file="LOWERSHOULDER_R_rot.STL" />
+    <mesh name="LOWERWRIST_L" file="LOWERWRIST_L_ball.STL" />
+    <mesh name="LOWERWRIST_R" file="LOWERWRIST_R_ball.STL" />
+    <mesh name="NECK" file="NECK.STL" />
+    <mesh name="TIBIA_L" file="TIBIA_L_rot.STL" />
+    <mesh name="TIBIA_R" file="TIBIA_R_rot.STL" />
+    <mesh name="UPPERARM_L" file="UPPERARM_L_rot.STL" />
+    <mesh name="UPPERARM_R" file="UPPERARM_R_rot.STL" />
+    <mesh name="UPPERSHOULDER_L" file="UPPERSHOULDER_L_rot.STL" />
+    <mesh name="UPPERSHOULDER_R" file="UPPERSHOULDER_R_rot.STL" />
+    <mesh name="UPPERWRIST_L" file="UPPERWRIST_L_rot.STL" />
+    <mesh name="UPPERWRIST_R" file="UPPERWRIST_R_rot.STL" />
+  </asset>
+
+  <!-- <default>
+    <default class="lower_body">
+      <default class="leg_motor">
+        <joint damping="0.05" armature="0.01" frictionloss="0.2" />
+      </default>
+      <default class="ankle_motor">
+        <joint damping="0.05" armature="0.01" frictionloss="0.2" />
+      </default>
+    </default>
+    <default class="upper_body">
+      <default class="arm_motor">
+        <joint damping="0.05" armature="0.01" frictionloss="0.2" />
+      </default>
+      <default class="waist_motor">
+        <joint damping="0.05" armature="0.01" frictionloss="0.2" />
+      </default>
+    </default>
+  </default> -->
+
+  <default>
+    <default class="panda">
+      <joint damping="0.05" armature="0.0741" frictionloss="0.2" />
+    </default>
+    <default class="kodiak">
+      <joint damping="0.05" armature="0.1153" frictionloss="0.2" />
+    </default>
+    <default class="koala_plus">
+      <joint damping="0.05" armature="0.0136" frictionloss="0.2" />
+    </default>
+    <default class="koala">
+      <joint damping="0.05" armature="0.0090" frictionloss="0.2" />
+    </default>
+    <default class="collision">
+        <geom group="3" rgba=".2 .6 .2 .3" type="capsule" contype="1" conaffinity="1"/>
+        <default class="foot_capsule">
+          <geom type="capsule" size="0.01"/>
+        </default>
+      </default>
+  </default>
+
+
+  <worldbody>
+    <body name="BASE_LINK" pos="0 0 1.17">
+      <joint name="root_joint" type="free" limited="false" actuatorfrclimited="false" />
+      <site name="imu" pos="0 0 0" size="0.01" />
+      <!-- Chest depth camera: pinhole forward-looking sensor, pitched 50° below horizontal.
+           Site's -Z axis must align with the camera's optical axis (MuJoCo pinhole convention).
+           Camera looks at (cos50°, 0, -sin50°) in body frame → site +Z = (-0.643, 0, 0.766). -->
+      <site name="chest_camera" pos="0.028 0 0.012" zaxis="-0.6427876097 0 0.7660444431" size="0.015" group="5"/>
+      <inertial pos="-0.081 0 -0.02" mass="12.72" diaginertia="0.2675 0.3169 0.1631" />
+      <geom name="trunk_collision" type="mesh" mesh="BASE_LINK" rgba="0.792156863 0.819607843 0.933333333 1" contype="1" conaffinity="1" group="1" />
+
+      <!-- ===== RIGHT LEG ===== -->
+      <body name="HIP_R" pos="-0.18337794 -0.0625 -0.28837794" quat="0.9238795325873352 0.0 0.3826834321814926 0.0">
+        <joint name="HIP_YAW_R" class="panda" type="hinge" axis="0 0 1" range="-3.14 3.14" />
+        <inertial pos="0.00398 -0.00006 0.00636" mass="0.83264" diaginertia="0.0019 0.00124 0.00094" />
+        <geom type="mesh" mesh="HIP_R" rgba="0.92 0.92 0.92 1" contype="0" conaffinity="0" group="1" />
+        <body name="HIP_ABAD_R" pos="0.141 0 0" quat="1 0 0 0">
+          <joint name="HIP_ROLL_R" class="panda" type="hinge" axis="1 0 0" range="-1.56 1.56" />
+          <inertial pos="0.00147 -0.002 0.00404" mass="2.78794" diaginertia="0.0072 0.01442 0.00791" />
+          <geom type="mesh" mesh="HIP_ABAD_R" rgba="0.92 0.92 0.92 1" contype="1" conaffinity="1" group="1" />
+          <body name="FEMUR_R" pos="0 -0.029 0" quat="0.9238795325873352 0.0 -0.3826834321814926 0.0">
+            <joint name="HIP_PITCH_R" class="kodiak" type="hinge" axis="0 1 0" range="-1.56 1.56" />
+            <inertial pos="-0.00174 -0.02002 -0.06111" mass="3.75384" diaginertia="0.07026 0.07594 0.01172" />
+            <geom type="mesh" mesh="FEMUR_R" rgba="0.92 0.92 0.92 1" contype="1" conaffinity="1" group="1" />
+            <body name="TIBIA_R" pos="0 0 -0.375" quat="1 0 0 0">
+              <joint name="KNEE_PITCH_R" class="kodiak" type="hinge" axis="0 1 0" range="0 3.14" />
+              <inertial pos="0.00694 -0.00006 -0.09678" mass="1.27716" diaginertia="0.02323 0.02318 0.00091" />
+              <geom name="right_tibia_collision" type="mesh" mesh="TIBIA_R" rgba="0.92 0.92 0.92 1" contype="0" conaffinity="0" group="1" />
+              <body name="ANKLE_R" pos="0 0 -0.375" quat="1 0 0 0">
+                <joint name="ANKLE_PITCH_R" class="koala" type="hinge" axis="0 1 0" range="-0.8 0.8" />
+                <inertial pos="0 0 0" mass="0.006946" diaginertia="0.000001 0.000001 0.000001" />
+                <geom type="mesh" mesh="ANKLE_R" rgba="0.92 0.92 0.92 1" contype="0" conaffinity="0" group="1" />
+                <body name="FOOT_R" pos="0 0 0" quat="1 0 0 0">
+                  <joint name="ANKLE_ROLL_R" class="koala" type="hinge" axis="1 0 0" range="-0.5 0.5" />
+                  <inertial pos="0.0337 5.00E-05 -0.04684" mass="0.41628" diaginertia="0.000722 0.002594 0.002998" />
+                  <geom name="right_foot_collision" type="mesh" mesh="FOOT_R" rgba="0.32 0.32 0.32 1" contype="1" conaffinity="1" group="1" />
+                  <site name="right_foot" pos="0.05 0 -0.06" size="0.01" group="5"/>
+                  <body name="FOOT_R_contact" pos="0 0 0" quat="1 0 0 0">
+                    <!-- <geom name="FOOT_R_contact" type="box" size="0.11 0.04 0.005" pos="0.035 0 -0.05" rgba="0.9 0.1 0.1 0.1" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" /> -->
+                    <!-- <geom name="FOOT_R_heel_in" type="sphere" size="0.005" pos="-0.05 0.02 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_heel_out" type="sphere" size="0.005" pos="-0.05 -0.02 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_toe_in" type="sphere" size="0.005" pos="0.135 0.035 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_toe_out" type="sphere" size="0.005" pos="0.135 -0.035 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_toe_in2" type="sphere" size="0.005" pos="0.11 0.045 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_toe_out2" type="sphere" size="0.005" pos="0.11 -0.045 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_heel_center" type="sphere" size="0.005" pos="-0.065 0.0 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />                   -->
+                    <geom name="FOOT_R_heel_in" type="sphere" size="0.005" pos="-0.06 0.025 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_heel_out" type="sphere" size="0.005" pos="-0.06 -0.025 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_toe_in" type="sphere" size="0.005" pos="0.155 0.028 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_toe_out" type="sphere" size="0.005" pos="0.155 -0.028 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_toe_in2" type="sphere" size="0.005" pos="0.12 0.045 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_toe_out2" type="sphere" size="0.005" pos="0.12 -0.045 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_R_heel_center" type="sphere" size="0.005" pos="-0.07 0.0 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />                  
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- ===== LEFT LEG ===== -->
+      <body name="HIP_L" pos="-0.18337794 0.0625 -0.28837794" quat="0.9238795325873352 0.0 0.3826834321814926 0.0">
+        <joint name="HIP_YAW_L" class="panda" type="hinge" axis="0 0 1" range="-3.14 3.14" />
+        <inertial pos="0.00398 0.00006 0.00636" mass="0.83264" diaginertia="0.0019 0.00124 0.00094" />
+        <geom type="mesh" mesh="HIP_L" rgba="0.92 0.92 0.92 1" contype="0" conaffinity="0" group="1" />
+        <body name="HIP_ABAD_L" pos="0.141 0 0" quat="1 0 0 0">
+          <joint name="HIP_ROLL_L" class="panda" type="hinge" axis="1 0 0" range="-1.56 1.56" />
+          <inertial pos="0.00147 0.002 0.00404" mass="2.78794" diaginertia="0.0072 0.01442 0.00791" />
+          <geom type="mesh" mesh="HIP_ABAD_L" rgba="0.92 0.92 0.92 1" contype="1" conaffinity="1" group="1" />
+          <body name="FEMUR_L" pos="0 0.029 0" quat="0.9238795325873352 0.0 -0.3826834321814926 0.0">
+            <joint name="HIP_PITCH_L" class="kodiak" type="hinge" axis="0 1 0" range="-1.56 1.56" />
+            <inertial pos="-0.00174 0.02002 -0.06111" mass="3.75384" diaginertia="0.07026 0.07594 0.01172" />
+            <geom type="mesh" mesh="FEMUR_L" rgba="0.92 0.92 0.92 1" contype="1" conaffinity="1" group="1" />
+            <body name="TIBIA_L" pos="0 0 -0.375" quat="1 0 0 0">
+              <joint name="KNEE_PITCH_L" class="kodiak" type="hinge" axis="0 1 0" range="0 3.14" />
+              <inertial pos="0.00694 0.00006 -0.09678" mass="1.27716" diaginertia="0.02323 0.02318 0.00091" />
+              <geom name="left_tibia_collision" type="mesh" mesh="TIBIA_L" rgba="0.92 0.92 0.92 1" contype="0" conaffinity="0" group="1" />
+              <body name="ANKLE_L" pos="0 0 -0.375" quat="1 0 0 0">
+                <joint name="ANKLE_PITCH_L" class="koala" type="hinge" axis="0 1 0" range="-0.8 0.8" />
+                <inertial pos="0 0 0" mass="0.006946" diaginertia="0.000001 0.000001 0.000001" />
+                <geom type="mesh" mesh="ANKLE_L" rgba="0.92 0.92 0.92 1" contype="0" conaffinity="0" group="1" />
+                <body name="FOOT_L" pos="0 0 0" quat="1 0 0 0">
+                  <joint name="ANKLE_ROLL_L" class="koala" type="hinge" axis="1 0 0" range="-0.5 0.5" />
+                  <inertial pos="0.0337 -5.00E-05 -0.04684" mass="0.41628" diaginertia="0.000722 0.002594 0.002998" />
+                  <geom name="left_foot_collision" type="mesh" mesh="FOOT_L" rgba="0.32 0.32 0.32 1" contype="1" conaffinity="1" group="1" />
+                  <site name="left_foot" pos="0.05 0 -0.06" size="0.01" group="5"/>
+                  <body name="FOOT_L_contact" pos="0 0 0" quat="1 0 0 0">
+                    <!-- <geom name="FOOT_L_contact" type="box" size="0.11 0.04 0.005" pos="0.035 0 -0.05" rgba="0.9 0.1 0.1 0.1" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" /> -->
+                    <!-- <geom name="FOOT_L_heel_in" type="sphere" size="0.005" pos="-0.05 0.02 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_heel_out" type="sphere" size="0.005" pos="-0.05 -0.02 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_toe_in" type="sphere" size="0.005" pos="0.135 0.035 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_toe_out" type="sphere" size="0.005" pos="0.135 -0.035 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_toe_in2" type="sphere" size="0.005" pos="0.11 0.045 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_toe_out2" type="sphere" size="0.005" pos="0.11 -0.045 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_heel_center" type="sphere" size="0.005" pos="-0.065 0.0 -0.055" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />   -->
+                    <geom name="FOOT_L_heel_in" type="sphere" size="0.005" pos="-0.06 0.025 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_heel_out" type="sphere" size="0.005" pos="-0.06 -0.025 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_toe_in" type="sphere" size="0.005" pos="0.155 0.028 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_toe_out" type="sphere" size="0.005" pos="0.155 -0.028 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_toe_in2" type="sphere" size="0.005" pos="0.12 0.045 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_toe_out2" type="sphere" size="0.005" pos="0.12 -0.045 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />
+                    <geom name="FOOT_L_heel_center" type="sphere" size="0.005" pos="-0.07 0.0 -0.05" rgba="0.9 0.1 0.1 0.9" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001" />                  
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- ===== RIGHT ARM ===== -->
+      <body name="UPPERSHOULDER_R" pos="-0.065084608 -0.1567 0.113474882" quat="1 0 0 0">
+        <joint name="SHOULDER_PITCH_R" class="koala_plus" type="hinge" axis="0 1 0" range="-3.14 3.14" />
+        <inertial pos="0.00158 0.00121 -0.00674" mass="0.43611" diaginertia="0.000385927 0.000304104 0.000234735" />
+        <geom type="mesh" mesh="UPPERSHOULDER_R" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+        <body name="LOWERSHOULDER_R" pos="0 0 0" quat="1 0 0 0">
+          <joint name="SHOULDER_ROLL_R" class="koala" type="hinge" axis="1 0 0" range="-3.14 3.14" />
+          <inertial pos="-6.00E-05 2.00E-05 -0.0535" mass="0.35798" diaginertia="0.001315 0.001242 0.000261" />
+          <geom type="mesh" mesh="LOWERSHOULDER_R" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+          <body name="UPPERARM_R" pos="0 0 0" quat="1 0 0 0">
+            <joint name="SHOULDER_YAW_R" class="koala" type="hinge" axis="0 0 1" range="-3.14 3.14" />
+            <inertial pos="0.0104 -0.00152 -0.1973" mass="0.51544" diaginertia="0.0021671894 0.0021508856 0.000365708" />
+            <geom name="right_upperarm_collision" type="mesh" mesh="UPPERARM_R" rgba="0.32 0.32 0.32 1" contype="1" conaffinity="1" group="1" />
+            <body name="ELBOW_R" pos="0.015 0 -0.22495" quat="1 0 0 0">
+              <joint name="ELBOW_PITCH_R" class="koala" type="hinge" axis="0 1 0" range="-3.14 3.14" />
+              <inertial pos="0.05387 0 -0.01441" mass="0.37853" diaginertia="0.000368755 0.001430606 0.00143177" />
+              <geom type="mesh" mesh="ELBOW_R" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+              <body name="FOREARM_R" pos="0.154950006 0 -0.01500002" quat="1 0 0 0">
+                <joint name="ELBOW_YAW_R" class="koala" type="hinge" axis="1 0 0" range="-3.14 3.14" />
+                <inertial pos="-0.00164 -0.01407 0" mass="0.47694" diaginertia="0.000265071 0.000684321 0.000600813" />
+                <geom type="mesh" mesh="FOREARM_R" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+                <body name="UPPERWRIST_R" pos="0 0 0" quat="1 0 0 0">
+                  <joint name="WRIST_PITCH_R" class="koala" type="hinge" axis="0 1 0" range="-3.14 3.14" />
+                  <inertial pos="0.05463 -0.00013 9.00E-05" mass="0.37004" diaginertia="0.000277159 0.001412655 0.001337476" />
+                  <geom type="mesh" mesh="UPPERWRIST_R" rgba="0.32 0.32 0.32 1" contype="1" conaffinity="1" group="1" />
+                  <body name="LOWERWRIST_R" pos="0 0 0" quat="1 0 0 0">
+                    <joint name="WRIST_YAW_R" class="koala" type="hinge" axis="1 0 0" range="-3.14 3.14" />
+                    <inertial pos="0.125 2.42E-06 0.00010824" mass="0.42" diaginertia="0.0004 0.0004 0.0004" />
+                    <geom name="LOWERWRIST_R_visual" type="mesh" mesh="LOWERWRIST_R" rgba="0.32 0.32 0.32 1.0" contype="0" conaffinity="0" group="1" />
+                    <body name="LOWERWRIST_R_contact" pos="0 0 0" quat="1 0 0 0">
+                      <geom name="hand_contact_R" type="sphere" size="0.04" pos="0.15 0 0"
+                            rgba="1.0 0.9 0.0 1.0" contype="1" conaffinity="1" condim="3"
+                            friction="1.0 0.005 0.0001" />
+                      <!-- hand contact site: local x-axis = push normal direction -->
+                      <site name="right_hand" pos="0.15 0 0" size="0.015" group="5"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- ===== LEFT ARM ===== -->
+      <body name="UPPERSHOULDER_L" pos="-0.065084608 0.1567 0.113474882" quat="1 0 0 0">
+        <joint name="SHOULDER_PITCH_L" class="koala_plus" type="hinge" axis="0 1 0" range="-3.14 3.14" />
+        <inertial pos="0.00158 -0.00121 -0.00674" mass="0.43611" diaginertia="0.000385927 0.000304104 0.000234735" />
+        <geom type="mesh" mesh="UPPERSHOULDER_L" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+        <body name="LOWERSHOULDER_L" pos="0 0 0" quat="1 0 0 0">
+          <joint name="SHOULDER_ROLL_L" class="koala" type="hinge" axis="1 0 0" range="-3.14 3.14" />
+          <inertial pos="-6.00E-05 -2.00E-05 -0.0535" mass="0.35798" diaginertia="0.001315 0.001242 0.000261" />
+          <geom type="mesh" mesh="LOWERSHOULDER_L" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+          <body name="UPPERARM_L" pos="0 0 0" quat="1 0 0 0">
+            <joint name="SHOULDER_YAW_L" class="koala" type="hinge" axis="0 0 1" range="-3.14 3.14" />
+            <inertial pos="0.0104 0.00152 -0.1973" mass="0.51544" diaginertia="0.0021671894 0.0021508856 0.000365708" />
+            <geom name="left_upperarm_collision" type="mesh" mesh="UPPERARM_L" rgba="0.22 0.22 0.22 1" contype="1" conaffinity="1" group="1" />
+            <body name="ELBOW_L" pos="0.015 0 -0.22495" quat="1 0 0 0">
+              <joint name="ELBOW_PITCH_L" class="koala" type="hinge" axis="0 1 0" range="-3.14 3.14" />
+              <inertial pos="0.05387 0 -0.01441" mass="0.37853" diaginertia="0.000368755 0.001430606 0.00143177" />
+              <geom type="mesh" mesh="ELBOW_L" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+              <body name="FOREARM_L" pos="0.154950006 0 -0.01500002" quat="1 0 0 0">
+                <joint name="ELBOW_YAW_L" class="koala" type="hinge" axis="1 0 0" range="-3.14 3.14" />
+                <inertial pos="-0.00164 0.01407 0" mass="0.47694" diaginertia="0.000265071 0.000684321 0.000600813" />
+                <geom type="mesh" mesh="FOREARM_L" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+                <body name="UPPERWRIST_L" pos="0 0 0" quat="1 0 0 0">
+                  <joint name="WRIST_PITCH_L" class="koala" type="hinge" axis="0 1 0" range="-3.14 3.14" />
+                  <inertial pos="0.05463 0.00013 9.00E-05" mass="0.37004" diaginertia="0.000277159 0.001412655 0.001337476" />
+                  <geom type="mesh" mesh="UPPERWRIST_L" rgba="0.32 0.32 0.32 1" contype="1" conaffinity="1" group="1" />
+                  <body name="LOWERWRIST_L" pos="0 0 0" quat="1 0 0 0">
+                    <joint name="WRIST_YAW_L" class="koala" type="hinge" axis="1 0 0" range="-3.14 3.14" />
+                    <inertial pos="0.125 -2.42E-06 0.00010824" mass="0.42" diaginertia="0.0004 0.0004 0.0004" />
+                    <geom name="LOWERWRIST_L_visual" type="mesh" mesh="LOWERWRIST_L" rgba="0.32 0.32 0.32 1" contype="0" conaffinity="0" group="1" />
+                    <body name="LOWERWRIST_L_contact" pos="0 0 0" quat="1 0 0 0">
+                      <geom name="hand_contact_L" type="sphere" size="0.04" pos="0.15 0 0"
+                            rgba="1.0 0.9 0.0 1.0" contype="1" conaffinity="1" condim="3"
+                            friction="1.0 0.005 0.0001" />
+                      <!-- hand contact site: local x-axis = push normal direction -->
+                      <site name="left_hand" pos="0.15 0 0" size="0.015" group="5"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <!-- ===== HEAD ===== -->
+      <body name="NECK" pos="-0.069373655 0 0.230835692">
+        <joint name="HEAD_YAW" class="koala" type="hinge" axis="0 0 1" range="-3.14 3.14" />
+        <inertial pos="0 0.00017 -0.00489" mass="0.34044" fullinertia="0.000199 0.000274 0.000167 1.56e-05 -2.91e-05 -2.51e-06" />
+        <geom type="mesh" mesh="NECK" rgba="0.22 0.22 0.22 1" contype="0" conaffinity="0" group="1" />
+        <body name="HEAD" pos="0 0 0" quat="1 0 0 0">
+          <joint name="HEAD_PITCH" class="koala" type="hinge" axis="0 1 0" range="-3.14 3.14" />
+          <inertial pos="0.00094 -1.00E-05 0.0631" mass="0.67367" fullinertia="0.00281 0.00225 0.00316 0 0 0" />
+          <geom type="mesh" mesh="HEAD" rgba="0.92 0.92 0.92 1" contype="0" conaffinity="0" group="1" />
+        </body>
+      </body>
+
+    </body>
+  </worldbody>
+
+  <sensor>
+    <gyro         name="imu_ang_vel" site="imu" />
+    <velocimeter  name="imu_lin_vel" site="imu" />
+    <accelerometer name="imu_lin_acc" site="imu" />
+    <subtreeangmom name="root_angmom" body="BASE_LINK" />
+  </sensor>
+
+</mujoco>

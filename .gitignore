@@ -1,0 +1,46 @@
+# ── Python ──────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+wheels/
+*.egg-info/
+.eggs/
+
+# ── Virtual environments / uv ───────────────────────────────────────────
+.venv/
+venv/
+env/
+# NOTE: uv.lock IS committed so `uv sync` is reproducible for new users.
+
+# ── Training outputs (logs, checkpoints, exports) ───────────────────────
+logs/
+outputs/
+runs/
+checkpoints/
+*.ckpt
+*.onnx
+
+# ── Experiment tracking (wandb) ─────────────────────────────────────────
+wandb/
+
+# ── Caches ──────────────────────────────────────────────────────────────
+.cache/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# ── IDEs / editors ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Notebooks ───────────────────────────────────────────────────────────
+*.ipynb
