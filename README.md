@@ -89,7 +89,7 @@ across all environments in a single call**, selected per task via
 
 - **`jax_pimpc`** — $\pi^n$ MPC (parallel-in-horizon) compiled with JAX/XLA; the
   default for both tasks and the fastest at training scale.
-- **`pimpc`** — the same $\pi^n$ MPC algorithm in PyTorch.
+- **`pimpc`** — the same $\pi^n$ MPC algorithm in PyTorch, more memory-efficient for lighter PC setups.
 - **`admm`** — batched consensus-ADMM QP solver (PyTorch).
 
 ### Scalability of $\pi^n$ MPC
